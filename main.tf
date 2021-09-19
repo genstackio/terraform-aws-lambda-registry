@@ -10,14 +10,14 @@ resource "aws_s3_bucket" "bucket" {
   dynamic "replication_configuration" {
     for_each = local.is_replicated ? {x: true} : {}
     content {
-      role = aws_iam_role.replication[0].arn
-      rules {
-        id     = "all"
-        status = "Enabled"
-        dynamic "destination" {
-          for_each = toset(var.replications)
-          content {
-            bucket        = destination.value
+      dynamic "rules" {
+        for_each = toset(var.replications)
+        content {
+          role = aws_iam_role.replication[0].arn
+          id     = "all"
+          status = "Enabled"
+          destination {
+            bucket        = rules.value
             storage_class = "STANDARD"
           }
         }
