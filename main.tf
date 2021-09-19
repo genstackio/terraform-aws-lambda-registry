@@ -12,10 +12,10 @@ resource "aws_s3_bucket" "bucket" {
     content {
       role = aws_iam_role.replication[0].arn
       dynamic "rules" {
-        for_each = toset(var.replications)
+        for_each = var.replications
         content {
           id       = "all"
-          priority = tonumber(rules.key)
+          priority = rules.key
           status   = "Enabled"
           destination {
             bucket        = rules.value
