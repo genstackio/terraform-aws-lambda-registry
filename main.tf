@@ -14,7 +14,7 @@ resource "aws_s3_bucket" "bucket" {
       dynamic "rules" {
         for_each = var.replications
         content {
-          id       = "all"
+          id       = "all-to-target-${rules.key}"
           priority = rules.key
           status   = "Enabled"
           destination {
